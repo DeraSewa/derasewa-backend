@@ -1,0 +1,10 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Vim swap files
+*.swp
+*.swo
+*.swn
