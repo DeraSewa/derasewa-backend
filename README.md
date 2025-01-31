@@ -13,8 +13,8 @@ This repository contains the main backend code of the DeraSewa, developed using 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or later)
-- npm (v6 or later)
+- Node.js (v22 or later)
+- npm (v11 or later)
 - MongoDB
 
 ### Installation
