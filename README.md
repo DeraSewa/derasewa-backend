@@ -1,13 +1,6 @@
 # DeraSewa Backend
 
-DeraSewa is an platform that helps users to host or list their rooms and apartments easily. Users can easily browse rooms through the app, making the process hassle-free in a bustling city, without dealing with brokers.
-
 This repository contains the main backend code of the DeraSewa, developed using Node.js and MongoDB.
-
-## Features
-- Host or list rooms and apartments effortlessly.
-- Browse available rooms and apartments.
-- Streamlined process with no brokers involved.
 
 ## Technologies Used
 - **Node.js**: JavaScript runtime environment.
