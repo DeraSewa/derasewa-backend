@@ -37,3 +37,7 @@ This repository contains the main backend code of the DeraSewa, developed using 
     ```sh
     npm start
     ```
+
+<p align="center">
+  &copy; 2024 - Present [DeraSewa](https://derasewa.com)
+</p>
