@@ -20,7 +20,7 @@ This repository contains the main backend code of the DeraSewa, developed using 
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/derasewa-backend.git
+   git clone https://github.com/DeraSewa/derasewa-backend.git
    cd derasewa-backend
 2. Install dependencies:
     ```sh
