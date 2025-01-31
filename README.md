@@ -39,5 +39,5 @@ This repository contains the main backend code of the DeraSewa, developed using 
     ```
 
 <p align="center">
-  &copy; 2024 - Present [DeraSewa](https://derasewa.com)
+  &copy; 2024 - Present <a href="https://derasewa.com" target="blank">DeraSewa</a>
 </p>
