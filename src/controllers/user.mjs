@@ -5,8 +5,9 @@ import generateReferralCode from "./referralCode.mjs";
 import bcrypt from 'bcrypt'; // Import bcryptjs
 import { generateToken, verifyToken } from "./jwt.mjs"; // Import JWT utilities
 
-const validateUserAccount = async (req, res) => {
+const validateAccount = async (req, res) => {
     const { firstName, lastName, email, password, usingReferralCode, referralCode } = req.body;
+    
     const user = await User.findOne({ email });
 
     // Validation logic
@@ -49,7 +50,7 @@ const validateUserAccount = async (req, res) => {
     }
 
     try {
-        const otp = await generateOtp(email, "register-user");
+        const otp = await generateOtp(email, "register-account");
         const payload = {
             email,
             firstName,
@@ -65,13 +66,14 @@ const validateUserAccount = async (req, res) => {
     }
 };
 
-const registerUserAccount = async (req, res) => {
+const registerAccount = async (req, res) => {
     const { firstName, lastName, email, password, otp, usingReferralCode, referralCode } = req.body;
     const userReferralCode = generateReferralCode();
+    console.log("uo")
 
     try {
         // Verify the OTP
-        const isOtpValid = await validateOtp(email, otp, "register-user")
+        const isOtpValid = await validateOtp(email, otp, "register-account")
         if (!isOtpValid) {
             return res.status(400).json({ type: "error", message: 'Invalid or expired OTP', payload: null });
         }
@@ -103,13 +105,13 @@ const registerUserAccount = async (req, res) => {
             }
         }
 
-        res.status(201).json({ type: "success", message: 'User account created successfully', payload: null });
+        res.status(201).json({ type: "success", message: 'Account successfully created', payload: null });
     } catch (error) {
         res.status(500).json({ type: "error", message: 'Error creating user account', payload: null });
     }
 }
 
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
 
     // Validate input
@@ -140,4 +142,4 @@ const loginUser = async (req, res) => {
     }
 }
 
-export { validateUserAccount, registerUserAccount, loginUser };
+export { validateAccount, registerAccount, login };

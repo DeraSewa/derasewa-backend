@@ -14,12 +14,12 @@ const sendMail = async ({ type, payload }) => {
     let _html;
 
     if (type === 1) {
-        _subject = "Register user OTP verification";
+        _subject = "Account Register";
         _html = html_type_1({ payload });
     }
 
     let mailOptions = {
-        from: `"Sender Name" <${process.env.GMAIL_USER}>`,
+        from: `"DeraSewa" <${process.env.GMAIL_USER}>`,
         to: payload.email,
         subject: _subject,
         html: _html
@@ -35,7 +35,12 @@ const sendMail = async ({ type, payload }) => {
 }
 
 function html_type_1({ payload }) {
-    return `Dear ${payload.firstName} ${payload.lastName}, your OTP is ${payload.otp}`;
+    return `
+
+<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Your OTP is: ${payload.otp}</p>
+
+    `;
 }
 
 export { sendMail };
