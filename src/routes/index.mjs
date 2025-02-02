@@ -7,11 +7,7 @@ const router = express.Router();
 router.use(apiKeyMiddleware);
 
 router.get("/", (req, res) => {
-    const response = {
-        status: "success",
-        message: "This is the root end point of DeraSewa Backend",
-    };
-    res.status(200).json(response);
+    res.status(200).json({ type: "success", message: "This is the root end point of DeraSewa Backend", payload: null });
 })
 .post("/validate-user-account", validateUserAccount)
 .post("/register-user-account", registerUserAccount)
