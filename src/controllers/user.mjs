@@ -7,7 +7,7 @@ import { generateToken, verifyToken } from "./jwt.mjs"; // Import JWT utilities
 
 const validateAccount = async (req, res) => {
     const { firstName, lastName, email, password, usingReferralCode, referralCode } = req.body;
-    
+
     const user = await User.findOne({ email });
 
     // Validation logic
@@ -23,7 +23,7 @@ const validateAccount = async (req, res) => {
         return res.status(400).json({ type: "error", message: 'Invalid email address', payload: null });
     }
 
-    if(user){
+    if (user) {
         return res.status(400).json({ type: "error", message: 'Email is already registered', payload: null });
     }
 
@@ -69,7 +69,6 @@ const validateAccount = async (req, res) => {
 const registerAccount = async (req, res) => {
     const { firstName, lastName, email, password, otp, usingReferralCode, referralCode } = req.body;
     const userReferralCode = generateReferralCode();
-    console.log("uo")
 
     try {
         // Verify the OTP
@@ -105,6 +104,15 @@ const registerAccount = async (req, res) => {
             }
         }
 
+        const payload = {
+            email,
+            firstName,
+            lastName,
+            otp: null
+        }
+
+        sendMail({ type: 2, payload });
+
         res.status(201).json({ type: "success", message: 'Account successfully created', payload: null });
     } catch (error) {
         res.status(500).json({ type: "error", message: 'Error creating user account', payload: null });
@@ -135,6 +143,15 @@ const login = async (req, res) => {
         // Generate a token without expiration
         const jwtToken = generateToken(user._id);
 
+        const payload = {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            otp: null
+        }
+
+        sendMail({ type: 3, payload });
+
         // Respond with token
         res.status(200).json({ type: "success", message: 'Login successful', payload: jwtToken });
     } catch (error) {
@@ -142,4 +159,77 @@ const login = async (req, res) => {
     }
 }
 
-export { validateAccount, registerAccount, login };
+const validateForgotPassword = async (req, res) => {
+    const { email, password } = await req.body;
+
+    // Validate input
+    if (!email || !password) {
+        return res.status(400).json({ type: "error", message: 'Email and password are required.', payload: null });
+    }
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ type: "error", message: 'Invalid email', payload: null });
+        }
+
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!password || typeof password !== 'string' || !passwordPattern.test(password)) {
+            return res.status(400).json({
+                type: "error",
+                message: 'Invalid password. Must be at least 8 characters long and include at least one capital letter, one small letter, one number, and one special character.',
+                payload: null
+            });
+        }
+
+        const otp = generateOtp(email, "change-password");
+
+        const payload = {
+            email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            otp
+        }
+
+        sendMail({ type: 4, payload });
+
+        res.status(200).json({ type: "success", message: 'Forgot password validated successfully', payload: null });
+    } catch (error) {
+        res.status(500).json({ type: "error", message: 'Server error', payload: null });
+    }
+}
+
+const changePassword = async(req, res)=>{
+    const { email, password, otp } = await req.body;
+
+    const user = await User.findOne({ email });
+
+    try{
+
+        const isOtpValid = await validateOtp(email, otp, "change-password");
+        if (!isOtpValid) {
+            return res.status(400).json({ type: "error", message: 'Invalid or expired OTP', payload: null });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+
+        const payload = {
+            email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            otp: null
+        }
+
+        sendMail({ type: 5, payload });
+
+        res.status(200).json({ type: "success", message: 'Account password modified successfully', payload: null });
+
+    }catch (error) {
+        res.status(500).json({ type: "error", message: 'Server error', payload: null });
+    }
+}
+
+export { validateAccount, registerAccount, login, validateForgotPassword, changePassword };

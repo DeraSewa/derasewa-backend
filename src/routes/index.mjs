@@ -1,6 +1,6 @@
 import express from "express";
 import apiKeyMiddleware from "../controllers/apiPolice.mjs";
-import { login, registerAccount, validateAccount } from "../controllers/user.mjs";
+import { login, registerAccount, validateAccount, validateForgotPassword, changePassword } from "../controllers/user.mjs";
 
 const router = express.Router();
 
@@ -12,5 +12,7 @@ router.get("/", (req, res) => {
 .post("/validate-account", validateAccount)
 .post("/register-account", registerAccount)
 .post("/login", login)
+.post("/validate-forgot-password", validateForgotPassword)
+.post("/change-password", changePassword)
 
 export default router;
