@@ -7,6 +7,7 @@ import { generateToken, verifyToken } from "./jwt.mjs"; // Import JWT utilities
 
 const validateUserAccount = async (req, res) => {
     const { firstName, lastName, email, password, usingReferralCode, referralCode } = req.body;
+    const user = await User.findOne({ email });
 
     // Validation logic
     if (!firstName || typeof firstName !== 'string' || firstName.trim() === '') {
@@ -19,6 +20,10 @@ const validateUserAccount = async (req, res) => {
 
     if (!email || typeof email !== 'string' || !/^\S+@\S+\.\S+$/.test(email)) {
         return res.status(400).json({ type: "error", message: 'Invalid email address', payload: null });
+    }
+
+    if(user){
+        return res.status(400).json({ type: "error", message: 'Email is already registered', payload: null });
     }
 
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
