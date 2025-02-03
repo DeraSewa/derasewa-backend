@@ -160,10 +160,10 @@ const login = async (req, res) => {
 }
 
 const validateForgotPassword = async (req, res) => {
-    const { email, password } = await req.body;
+    const { email, newPassword } = await req.body;
 
     // Validate input
-    if (!email || !password) {
+    if (!email || !newPassword) {
         return res.status(400).json({ type: "error", message: 'Email and password are required.', payload: null });
     }
 
@@ -175,7 +175,7 @@ const validateForgotPassword = async (req, res) => {
         }
 
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!password || typeof password !== 'string' || !passwordPattern.test(password)) {
+        if (!newPassword || typeof newPassword !== 'string' || !passwordPattern.test(newPassword)) {
             return res.status(400).json({
                 type: "error",
                 message: 'Invalid password. Must be at least 8 characters long and include at least one capital letter, one small letter, one number, and one special character.',
@@ -183,7 +183,7 @@ const validateForgotPassword = async (req, res) => {
             });
         }
 
-        const otp = generateOtp(email, "change-password");
+        const otp = await generateOtp(email, "change-password");
 
         const payload = {
             email,
@@ -201,7 +201,7 @@ const validateForgotPassword = async (req, res) => {
 }
 
 const changePassword = async(req, res)=>{
-    const { email, password, otp } = await req.body;
+    const { email, newPassword, otp } = await req.body;
 
     const user = await User.findOne({ email });
 
@@ -213,7 +213,7 @@ const changePassword = async(req, res)=>{
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
         await User.findByIdAndUpdate(user._id, { password: hashedPassword });
 
         const payload = {
