@@ -1,11 +1,11 @@
 import express from "express";
-import apiKeyMiddleware from "../controllers/apiPolice.mjs";
+import checkAPIKey from "../controllers/apiPolice.mjs";
 import { login, registerAccount, validateAccount, validateForgotPassword, changePassword } from "../controllers/user.mjs";
 import { submitProperty } from "../controllers/property.mjs";
 
 const router = express.Router();
 
-router.use(apiKeyMiddleware);
+router.use(checkAPIKey);
 
 router.get("/", (req, res) => {
     res.status(200).json({ type: "success", message: "This is the root end point of DeraSewa Backend", payload: null });
