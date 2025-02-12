@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken';
 const secretKey = process.env.JWT_SECRET;
 
 // Function to generate a JWT
-const generateToken = (userId) => {
+const generateJWT = (userId) => {
     return jwt.sign({ userId }, secretKey);
 };
 
 // Function to verify a JWT
-const verifyToken = (token) => {
+const verifyJWT = (token) => {
     try {
         return jwt.verify(token, secretKey);
     } catch (error) {
@@ -16,4 +16,4 @@ const verifyToken = (token) => {
     }
 };
 
-export { generateToken, verifyToken };
+export { generateJWT, verifyJWT };
