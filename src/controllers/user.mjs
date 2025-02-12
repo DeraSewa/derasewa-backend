@@ -3,7 +3,7 @@ import { generateOtp, validateOtp } from "./otp.mjs";
 import User from "../models/user.mjs"; // Import the User model
 import generateReferralCode from "./referralCode.mjs";
 import bcrypt from 'bcrypt'; // Import bcryptjs
-import { generateToken, verifyToken } from "./jwt.mjs"; // Import JWT utilities
+import { generateJWT, verifyJWT } from "./jwt.mjs"; // Import JWT utilities
 
 const validateAccount = async (req, res) => {
     const { firstName, lastName, email, password, usingReferralCode, referralCode } = req.body;
@@ -141,7 +141,7 @@ const login = async (req, res) => {
         }
 
         // Generate a token without expiration
-        const jwtToken = generateToken(user._id);
+        const jwtToken = generateJWT(user._id);
 
         const payload = {
             email: user.email,
