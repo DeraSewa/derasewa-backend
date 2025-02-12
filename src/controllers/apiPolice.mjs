@@ -20,4 +20,4 @@ const checkAPIKey = (req, res, next) => {
     }
 };
 
-export default checkAPIKey;
+export { checkAPIKey };
