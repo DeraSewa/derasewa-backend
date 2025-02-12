@@ -3,7 +3,7 @@ dotenv.config();
 
 const API_KEY = process.env.API_KEY;
 
-const apiKeyMiddleware = (req, res, next) => {
+const checkAPIKey = (req, res, next) => {
     const apiKey = req.headers['x-api-key'];
 
     // Normalize both keys for comparison
@@ -20,4 +20,4 @@ const apiKeyMiddleware = (req, res, next) => {
     }
 };
 
-export default apiKeyMiddleware;
+export default checkAPIKey;
