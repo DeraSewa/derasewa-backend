@@ -1,5 +1,5 @@
 import express from "express";
-import checkAPIKey from "../controllers/apiPolice.mjs";
+import { checkAPIKey } from "../controllers/apiPolice.mjs";
 import { login, registerAccount, validateAccount, validateForgotPassword, changePassword } from "../controllers/user.mjs";
 import { submitProperty } from "../controllers/property.mjs";
 
