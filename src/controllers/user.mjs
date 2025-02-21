@@ -6,18 +6,15 @@ import bcrypt from 'bcrypt'; // Import bcryptjs
 import { generateJWT, verifyJWT } from "./jwt.mjs"; // Import JWT utilities
 
 const validateAccount = async (req, res) => {
-    const { firstName, lastName, email, password, usingReferralCode, referralCode } = req.body;
+    const { fullName, email, password, usingReferralCode, referralCode } = req.body;
 
     const user = await User.findOne({ email });
 
     // Validation logic
-    if (!firstName || typeof firstName !== 'string' || firstName.trim() === '') {
-        return res.status(400).json({ type: "error", message: 'Invalid first name', payload: null });
+    if (fullName !== 'string' || firstName.trim() === '') {
+        return res.status(400).json({ type: "error", message: 'Invalid full name', payload: null });
     }
 
-    if (!lastName || typeof lastName !== 'string' || lastName.trim() === '') {
-        return res.status(400).json({ type: "error", message: 'Invalid last name', payload: null });
-    }
 
     if (!email || typeof email !== 'string' || !/^\S+@\S+\.\S+$/.test(email)) {
         return res.status(400).json({ type: "error", message: 'Invalid email address', payload: null });
@@ -53,8 +50,7 @@ const validateAccount = async (req, res) => {
         const otp = await generateOtp(email, "register-account");
         const payload = {
             email,
-            firstName,
-            lastName,
+            fullName,
             otp
         };
         await sendMail({ type: 1, payload });
@@ -67,7 +63,7 @@ const validateAccount = async (req, res) => {
 };
 
 const registerAccount = async (req, res) => {
-    const { firstName, lastName, email, password, otp, usingReferralCode, referralCode } = req.body;
+    const { fullName, email, password, otp, usingReferralCode, referralCode } = req.body;
     const userReferralCode = generateReferralCode();
 
     try {
@@ -82,8 +78,7 @@ const registerAccount = async (req, res) => {
 
         // Create a new user with the hashed password and generated referral code
         const potentialReferringUser = new User({
-            firstName,
-            lastName,
+            fullName,
             email,
             password: hashedPassword,
             referralCode: userReferralCode
@@ -106,8 +101,7 @@ const registerAccount = async (req, res) => {
 
         const payload = {
             email,
-            firstName,
-            lastName,
+            fullName,
             otp: null
         }
 
@@ -145,8 +139,7 @@ const login = async (req, res) => {
 
         const payload = {
             email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            fullName: user.fullName,
             otp: null
         }
 
@@ -187,8 +180,7 @@ const validateForgotPassword = async (req, res) => {
 
         const payload = {
             email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            fullName: user.fullName,
             otp
         }
 
@@ -218,8 +210,7 @@ const changePassword = async(req, res)=>{
 
         const payload = {
             email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            fullName: user.fullName,
             otp: null
         }
 

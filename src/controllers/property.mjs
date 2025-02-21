@@ -1,5 +1,5 @@
 import Property from '../models/property.mjs'; // Adjust the import path based on your project structure
-import { verifyToken } from './jwt.mjs'; // Import the verifyToken function
+import { verifyJWT } from './jwt.mjs'; // Import the verifyToken function
 
 const submitProperty = async (req, res) => {
     console.log(req.body);

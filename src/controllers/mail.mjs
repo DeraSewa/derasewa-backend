@@ -57,7 +57,7 @@ const sendMail = async ({ type, payload }) => {
 function html_type_1({ payload }) {
     return `
 
-<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Dear ${payload.fullName},</p>
 <p>Your OTP is: ${payload.otp} use this otp to register account</p>
 
     `;
@@ -66,7 +66,7 @@ function html_type_1({ payload }) {
 function html_type_2({ payload }) {
     return `
 
-<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Dear ${payload.fullName},</p>
 <p>You successfully registered account on derasewa</p>
 
     `;
@@ -75,7 +75,7 @@ function html_type_2({ payload }) {
 function html_type_3({ payload }) {
     return `
 
-<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Dear ${payload.fullName},</p>
 <p>Someone login you account, if it was you just ignore this message, if it was not you change the account password</p>
 
     `;
@@ -84,7 +84,7 @@ function html_type_3({ payload }) {
 function html_type_4({ payload }) {
     return `
 
-<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Dear ${payload.fullName},</p>
 <p>use ${payload.otp} to change your password</p>
 
     `;
@@ -93,7 +93,7 @@ function html_type_4({ payload }) {
 function html_type_5({ payload }) {
     return `
 
-<p>Dear ${payload.firstName} ${payload.lastName},</p>
+<p>Dear ${payload.fullName},</p>
 <p>Someone modified you account password, if it was you just ignore this, but if it was not you please secure your account</p>
 
     `;
