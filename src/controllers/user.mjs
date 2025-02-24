@@ -6,13 +6,18 @@ import bcrypt from 'bcrypt'; // Import bcryptjs
 import { generateJWT, verifyJWT } from "./jwt.mjs"; // Import JWT utilities
 
 const validateAccount = async (req, res) => {
-    const { fullName, email, password, usingReferralCode, referralCode } = req.body;
+    let { fullName, email, password, usingReferralCode, referralCode } = await req.body;
+
+    email = email.trim();
+    fullName = fullName.trim();
+    password = password.trim();
 
     const user = await User.findOne({ email });
 
     // Validation logic
-    if (fullName !== 'string' || firstName.trim() === '') {
+    if (typeof fullName !== 'string') {
         return res.status(400).json({ type: "error", message: 'Invalid full name', payload: null });
+
     }
 
 
@@ -63,8 +68,14 @@ const validateAccount = async (req, res) => {
 };
 
 const registerAccount = async (req, res) => {
-    const { fullName, email, password, otp, usingReferralCode, referralCode } = req.body;
+    let { fullName, email, password, otp, usingReferralCode, referralCode } = await req.body;
     const userReferralCode = generateReferralCode();
+
+    fullName = fullName.trim();
+    email = email.trim();
+    password = password.trim();
+
+    console.log(otp);
 
     try {
         // Verify the OTP
@@ -114,7 +125,7 @@ const registerAccount = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = await req.body;
 
     // Validate input
     if (!email || !password) {
@@ -134,6 +145,7 @@ const login = async (req, res) => {
             return res.status(400).json({ type: "error", message: 'Invalid email or password.', payload: null });
         }
 
+
         // Generate a token without expiration
         const jwtToken = generateJWT(user._id);
 
@@ -143,12 +155,12 @@ const login = async (req, res) => {
             otp: null
         }
 
-        sendMail({ type: 3, payload });
+        await sendMail({ type: 3, payload });
 
         // Respond with token
-        res.status(200).json({ type: "success", message: 'Login successful', payload: jwtToken });
+        return res.status(200).json({ type: "success", message: 'Login successful', payload: jwtToken });
     } catch (error) {
-        res.status(500).json({ type: "error", message: 'Server error', payload: null });
+        return res.status(500).json({ type: "error", message: 'Server error', payload: null });
     }
 }
 
@@ -223,4 +235,40 @@ const changePassword = async(req, res)=>{
     }
 }
 
-export { validateAccount, registerAccount, login, validateForgotPassword, changePassword };
+const resendOTP = async(req, res)=>{
+    const { email, type } = await req.body;
+
+    if(type === "register-account"){
+        try {
+            const otp = await generateOtp(email, "register-account");
+            const payload = {
+                email,
+                fullName: "User",
+                otp
+            };
+            await sendMail({ type: 1, payload });
+    
+            // If validation passes
+            res.status(200).json({ type: "success", message: 'Successfuly resend OTP', payload: null });
+        } catch (error) {
+            res.status(500).json({ type: "error", message: 'Error generating OTP or sending email', payload: null });
+        }
+    }else if(type === "change-password"){
+        try {
+            const otp = await generateOtp(email, "change-password");
+            const payload = {
+                email,
+                fullName: "User",
+                otp
+            };
+            await sendMail({ type: 4, payload });
+    
+            // If validation passes
+            res.status(200).json({ type: "success", message: 'Successfuly resend OTP', payload: null });
+        } catch (error) {
+            res.status(500).json({ type: "error", message: 'Error generating OTP or sending email', payload: null });
+        }
+    }
+}
+
+export { validateAccount, registerAccount, login, validateForgotPassword, changePassword, resendOTP };

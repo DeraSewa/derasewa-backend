@@ -19,19 +19,19 @@ const sendMail = async ({ type, payload }) => {
             _html = html_type_1({ payload });
             break;
         case 2:
-            _subject = "Account Register";
+            _subject = "Account Registerd";
             _html = html_type_2({ payload });
             break;
         case 3:
-            _subject = "Login Alert";
+            _subject = "Login Dectected";
             _html = html_type_3({ payload });
             break;
         case 4:
-            _subject = "Forgot Password";
+            _subject = "Change Password";
             _html = html_type_4({ payload });
             break;
-        case 4:
-            _subject = "Password Modify";
+        case 5:
+            _subject = "Password Modified";
             _html = html_type_5({ payload });
             break;
         default:
@@ -57,8 +57,16 @@ const sendMail = async ({ type, payload }) => {
 function html_type_1({ payload }) {
     return `
 
-<p>Dear ${payload.fullName},</p>
-<p>Your OTP is: ${payload.otp} use this otp to register account</p>
+<p>Dear <strong>${payload.fullName}</strong>,</p>
+<br/>
+<p>Your OTP for account registration is: <strong>${payload.otp}</strong></p>
+<p>This OTP is valid for 3 minutes. Do not share it with anyone.</p>
+<p>If you did not request this, please secure you email account ASAP.</p>
+<br/>
+<p>Thank you for choosing DeraSewa.</p>
+<br/>
+<p>Regards,</p>
+<strong>DeraSewa</strong>
 
     `;
 }
@@ -66,8 +74,15 @@ function html_type_1({ payload }) {
 function html_type_2({ payload }) {
     return `
 
-<p>Dear ${payload.fullName},</p>
-<p>You successfully registered account on derasewa</p>
+<p>Dear <strong>${payload.fullName}</strong>,</p>
+<br/>
+<p>You have successfully created your account on DeraSewa.</p>
+<p>If you did not request this, please secure you email account ASAP.</p>
+<br/>
+<p>Thank you for choosing DeraSewa.</p>
+<br/>
+<p>Regards,</p>
+<strong>DeraSewa</strong>
 
     `;
 }
@@ -75,8 +90,16 @@ function html_type_2({ payload }) {
 function html_type_3({ payload }) {
     return `
 
-<p>Dear ${payload.fullName},</p>
-<p>Someone login you account, if it was you just ignore this message, if it was not you change the account password</p>
+<p>Dear <strong>${payload.fullName}</strong>,</p>
+<br/>
+<p>We noticed a new login to your account on DeraSewa.</p>
+<p>If this was you, you can ignore this email.</p>
+<p>If you did not request this, please secure you email account ASAP.</p>
+<br/>
+<p>Thank you for choosing DeraSewa.</p>
+<br/>
+<p>Regards,</p>
+<strong>DeraSewa</strong>
 
     `;
 }
@@ -84,8 +107,16 @@ function html_type_3({ payload }) {
 function html_type_4({ payload }) {
     return `
 
-<p>Dear ${payload.fullName},</p>
-<p>use ${payload.otp} to change your password</p>
+<p>Dear <strong>${payload.fullName}</strong>,</p>
+<br/>
+<p>Your OTP for changing password is: <strong>${payload.otp}</strong></p>
+<p>This OTP is valid for 3 minutes. Do not share it with anyone.</p>
+<p>If you did not request this, please secure you email account ASAP.</p>
+<br/>
+<p>Thank you for choosing DeraSewa.</p>
+<br/>
+<p>Regards,</p>
+<strong>DeraSewa</strong>
 
     `;
 }
@@ -93,8 +124,16 @@ function html_type_4({ payload }) {
 function html_type_5({ payload }) {
     return `
 
-<p>Dear ${payload.fullName},</p>
-<p>Someone modified you account password, if it was you just ignore this, but if it was not you please secure your account</p>
+<p>Dear <strong>${payload.fullName}</strong>,</p>
+<br/>
+<p>We noticed you have successfully changed your DeraSewa app password.</strong></p>
+<p>If this was you, you can ignore this email.</p>
+<p>If you did not request this, please secure you email account ASAP.</p>
+<br/>
+<p>Thank you for choosing DeraSewa.</p>
+<br/>
+<p>Regards,</p>
+<strong>DeraSewa</strong>
 
     `;
 }
